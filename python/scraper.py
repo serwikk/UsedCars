@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
+from datetime import datetime
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
@@ -18,6 +19,8 @@ all_results = []
 driver.get("https://es.wallapop.com/coches-segunda-mano")
 
 time.sleep(3)
+
+# fecha = datetime.now().strftime('%Y/%m/%d-%H_%M_%S')
 
 ul_elements = driver.find_elements(By.XPATH, '//ul[@aria-label="Items list"]')
 
@@ -51,14 +54,6 @@ for ul in ul_elements:
         except:
             link = "N/A"
 
-        # Imprimir los datos extraídos
-        # print(f"Precio: {price}")
-        # print(f"Título: {title}")
-        # print(f"Información adicional: {additional_info}")
-        # print(f"Descripción: {description}")
-        # print(f"Link: {link}")
-        # print("-" * 40)
-
         result = {
             "price" : price,
             "title": title,
@@ -77,9 +72,9 @@ driver.quit()
 
 import csv
 
-with open("wallapop_cars.csv", mode="w", newline="", encoding="utf-8") as file:
+with open("wallapop_cars.csv", mode="a", newline="", encoding="utf-8") as file:
     writer = csv.DictWriter(file, fieldnames=["price", "title", "additional_info", "description", "link"])
-    writer.writeheader()
+    # writer.writeheader()
     writer.writerows(all_results)
 
 print("Datos guardados en 'wallapop_cars.csv'.")
